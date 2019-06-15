@@ -1,0 +1,574 @@
+<?xml version='1.0' encoding='utf-8'?>
+<MixxxControllerPreset mixxxVersion="" schemaVersion="1">
+	<info>
+		<name>Gemini GMX</name>
+		<author>Miss</author>
+		<description>Native mapping for the Gemini GMX controller.</description>
+	</info>
+
+	<controller id="GMX">
+		<scriptfiles>
+			<file functionprefix="GeminiGMX" filename="Gemini GMX-scripts.js" />
+		</scriptfiles>
+
+		<controls>
+			<!-- Play -->
+			<control>
+				<group>[Channel1]</group>
+				<key>play</key>
+				<status>0x90</status>
+				<midino>1</midino>
+			</control>
+			<control>
+				<group>[Channel2]</group>
+				<key>play</key>
+				<status>0x91</status>
+				<midino>1</midino>
+			</control>
+
+			<!-- Cue -->
+			<control>
+				<group>[Channel1]</group>
+				<key>cue_default</key>
+				<status>0x90</status>
+				<midino>2</midino>
+			</control>
+			<control>
+				<group>[Channel2]</group>
+				<key>cue_default</key>
+				<status>0x91</status>
+				<midino>2</midino>
+			</control>
+
+			<!--
+				TODO: Figure out Mixxx's beatloop options
+			<control>
+				<group>[Channel1]</group>
+				<key>beatloop_0</key>
+				<status>0x90</status>
+				<midino>3</midino>
+			</control>
+			-->
+
+			<!-- Reloop toggle -->
+			<control>
+				<group>[Channel1]</group>
+				<key>reloop_toggle</key>
+				<status>0x90</status>
+				<midino>5</midino>
+			</control>
+			<control>
+				<group>[Channel2]</group>
+				<key>reloop_toggle</key>
+				<status>0x91</status>
+				<midino>5</midino>
+			</control>
+
+			<!-- TODO: loop_halve on 8 & loop_double on 7 -->
+
+			<!--
+				TODO: Figure out "hot cue on/off auto loop" button, what does it do? How do we replicate that in Mixxx's controls?
+			<control>
+				<group>[Channel1]</group>
+				<key>???</key>
+				<status>0x90</status>
+				<midino>6</midino>
+			</control>
+			-->
+
+			<!-- TODO: Hotcues, probably have to control them via script -->
+
+			<!-- BPM Tap -->
+			<control>
+				<group>[Channel1]</group>
+				<key>bpm_tap</key>
+				<status>0x90</status>
+				<midino>17</midino>
+			</control>
+			<control>
+				<group>[Channel2]</group>
+				<key>bpm_tap</key>
+				<status>0x91</status>
+				<midino>17</midino>
+			</control>
+
+			<!-- Keylock -->
+			<control>
+				<group>[Channel1]</group>
+				<key>keylock</key>
+				<status>0x90</status>
+				<midino>19</midino>
+			</control>
+			<control>
+				<group>[Channel2]</group>
+				<key>keylock</key>
+				<status>0x91</status>
+				<midino>19</midino>
+			</control>
+
+			<!-- Repeat -->
+			<control>
+				<group>[Channel1]</group>
+				<key>repeat</key>
+				<status>0x90</status>
+				<midino>24</midino>
+			</control>
+			<control>
+				<group>[Channel2]</group>
+				<key>repeat</key>
+				<status>0x91</status>
+				<midino>24</midino>
+			</control>
+
+			<!-- Browse selection -->
+			<!-- TODO: Completely handle this button by scripts so that we can use MoveFocus keys and LoadSelectedTrack programatically -->
+			<!-- TODO: Make this automatically switch the cue to headphones (toggled by auto-cue button?) -->
+			<control>
+				<group>[Channel1]</group>
+				<key>LoadSelectedTrack</key>
+				<status>0x90</status>
+				<midino>28</midino>
+			</control>
+			<control>
+				<group>[Channel2]</group>
+				<key>LoadSelectedTrack</key>
+				<status>0x91</status>
+				<midino>28</midino>
+			</control>
+
+			<!-- Search -->
+			<control>
+				<group>[Channel1]</group>
+				<key>GeminiGMX.Search</key>
+				<status>0x90</status>
+				<midino>26</midino>
+				<options><Script-Binding/></options>
+			</control>
+			<control>
+				<group>[Channel1]</group>
+				<key>GeminiGMX.Search</key>
+				<status>0x91</status>
+				<midino>26</midino>
+				<options><Script-Binding/></options>
+			</control>
+
+			<!-- Reverse -->
+			<control>
+				<group>[Channel1]</group>
+				<key>reverse</key>
+				<status>0x90</status>
+				<midino>33</midino>
+			</control>
+			<control>
+				<group>[Channel2]</group>
+				<key>reverse</key>
+				<status>0x91</status>
+				<midino>33</midino>
+			</control>
+
+			<!-- Headphone cue -->
+			<control>
+				<group>[Channel1]</group>
+				<key>pfl</key>
+				<status>0x90</status>
+				<midino>34</midino>
+			</control>
+			<control>
+				<group>[Channel2]</group>
+				<key>pfl</key>
+				<status>0x91</status>
+				<midino>34</midino>
+			</control>
+
+			<!-- Pitch slider -->
+			<!-- TODO: Handle these in scripts so that we can invert it manually and avoid the 0.13 offset? -->
+			<control>
+				<group>[Channel1]</group>
+				<key>rate</key>
+				<status>0xB0</status>
+				<midino>1</midino>
+				<options><Invert/></options>
+			</control>
+			<control>
+				<group>[Channel2]</group>
+				<key>rate</key>
+				<status>0xB1</status>
+				<midino>1</midino>
+				<options><Invert/></options>
+			</control>
+
+			<!-- Filter -->
+			<control>
+				<group>[QuickEffectRack1_[Channel1]]</group>
+				<key>super1</key>
+				<status>0xB0</status>
+				<midino>4</midino>
+			</control>
+			<control>
+				<group>[QuickEffectRack1_[Channel2]]</group>
+				<key>super1</key>
+				<status>0xB1</status>
+				<midino>4</midino>
+			</control>
+
+			<!-- Jogwheel touch -->
+			<control>
+				<group>[Channel1]</group>
+				<key>GeminiGMX.JogTouch</key>
+				<status>0x90</status>
+				<midino>27</midino>
+				<options><Script-Binding/></options>
+			</control>
+			<control>
+				<group>[Channel2]</group>
+				<key>GeminiGMX.JogTouch</key>
+				<status>0x91</status>
+				<midino>27</midino>
+				<options><Script-Binding/></options>
+			</control>
+
+			<!-- Jogwheel spin -->
+			<control>
+				<group>[Channel1]</group>
+				<key>GeminiGMX.JogSpin</key>
+				<status>0xB0</status>
+				<midino>5</midino>
+				<options><Script-Binding/></options>
+			</control>
+			<control>
+				<group>[Channel2]</group>
+				<key>GeminiGMX.JogSpin</key>
+				<status>0xB1</status>
+				<midino>5</midino>
+				<options><Script-Binding/></options>
+			</control>
+
+			<!-- Gain -->
+			<control>
+				<group>[Channel1]</group>
+				<key>pregain</key>
+				<status>0xB3</status>
+				<midino>1</midino>
+			</control>
+			<control>
+				<group>[Channel2]</group>
+				<key>pregain</key>
+				<status>0xB3</status>
+				<midino>2</midino>
+			</control>
+
+			<!-- Mid EQ -->
+			<control>
+				<group>[EqualizerRack1_[Channel1]_Effect1]</group>
+				<key>parameter2</key>
+				<status>0xB3</status>
+				<midino>3</midino>
+			</control>
+			<control>
+				<group>[EqualizerRack1_[Channel2]_Effect1]</group>
+				<key>parameter2</key>
+				<status>0xB3</status>
+				<midino>4</midino>
+			</control>
+
+			<!-- High EQ -->
+			<control>
+				<group>[EqualizerRack1_[Channel1]_Effect1]</group>
+				<key>parameter3</key>
+				<status>0xB3</status>
+				<midino>5</midino>
+			</control>
+			<control>
+				<group>[EqualizerRack1_[Channel2]_Effect1]</group>
+				<key>parameter3</key>
+				<status>0xB3</status>
+				<midino>6</midino>
+			</control>
+
+			<!-- Low EQ -->
+			<control>
+				<group>[EqualizerRack1_[Channel1]_Effect1]</group>
+				<key>parameter1</key>
+				<status>0xB3</status>
+				<midino>7</midino>
+			</control>
+			<control>
+				<group>[EqualizerRack1_[Channel2]_Effect1]</group>
+				<key>parameter1</key>
+				<status>0xB3</status>
+				<midino>8</midino>
+			</control>
+
+			<!-- Volume -->
+			<control>
+				<group>[Channel1]</group>
+				<key>volume</key>
+				<status>0xB3</status>
+				<midino>9</midino>
+			</control>
+			<control>
+				<group>[Channel2]</group>
+				<key>volume</key>
+				<status>0xB3</status>
+				<midino>10</midino>
+			</control>
+
+			<!-- Crossfader -->
+			<control>
+				<group>[Master]</group>
+				<key>crossfader</key>
+				<status>0xB3</status>
+				<midino>11</midino>
+				<options><Invert/></options>
+			</control>
+
+			<!-- Cue Mix -->
+			<control>
+				<group>[Master]</group>
+				<key>headMix</key>
+				<status>0xB3</status>
+				<midino>12</midino>
+				<options><Invert/></options>
+			</control>
+
+			<!-- Master Volume -->
+			<control>
+				<group>[Master]</group>
+				<key>gain</key>
+				<status>0xB3</status>
+				<midino>13</midino>
+				<options><Invert/></options>
+			</control>
+
+			<!-- Cue Volume -->
+			<control>
+				<group>[Master]</group>
+				<key>headGain</key>
+				<status>0xB3</status>
+				<midino>14</midino>
+				<options><Invert/></options>
+			</control>
+
+			<!-- Browse -->
+			<control>
+				<group>[Library]</group>
+				<key>MoveVertical</key>
+				<status>0xB3</status>
+				<midino>15</midino>
+				<options><Spread64/></options>
+			</control>
+
+			<!-- Booth Volume -->
+			<control>
+				<group>[Master]</group>
+				<key>booth_gain</key>
+				<status>0xB3</status>
+				<midino>16</midino>
+				<options><Invert/></options>
+			</control>
+		</controls>
+
+		<outputs>
+			<!-- Play indicators -->
+			<output>
+				<group>[Channel1]</group>
+				<key>play_indicator</key>
+				<status>0x90</status>
+				<midino>1</midino>
+				<minimum>0.1</minimum>
+			</output>
+			<output>
+				<group>[Channel2]</group>
+				<key>play_indicator</key>
+				<status>0x91</status>
+				<midino>1</midino>
+				<minimum>0.1</minimum>
+			</output>
+
+			<!-- Cue indicators -->
+			<output>
+				<group>[Channel1]</group>
+				<key>cue_indicator</key>
+				<status>0x90</status>
+				<midino>2</midino>
+				<minimum>0.1</minimum>
+			</output>
+			<output>
+				<group>[Channel2]</group>
+				<key>cue_indicator</key>
+				<status>0x91</status>
+				<midino>2</midino>
+				<minimum>0.1</minimum>
+			</output>
+
+			<!-- Keylock indicators -->
+			<output>
+				<group>[Channel1]</group>
+				<key>keylock</key>
+				<status>0x90</status>
+				<midino>19</midino>
+				<minimum>0.1</minimum>
+			</output>
+			<output>
+				<group>[Channel2]</group>
+				<key>keylock</key>
+				<status>0x91</status>
+				<midino>19</midino>
+				<minimum>0.1</minimum>
+			</output>
+
+			<!-- Reverse indicators -->
+			<output>
+				<group>[Channel1]</group>
+				<key>reverse</key>
+				<status>0x90</status>
+				<midino>33</midino>
+				<minimum>0.1</minimum>
+			</output>
+			<output>
+				<group>[Channel2]</group>
+				<key>reverse</key>
+				<status>0x91</status>
+				<midino>33</midino>
+				<minimum>0.1</minimum>
+			</output>
+
+			<!-- Headphone indicators -->
+			<output>
+				<group>[Channel1]</group>
+				<key>pfl</key>
+				<status>0x90</status>
+				<midino>34</midino>
+				<minimum>0.1</minimum>
+			</output>
+			<output>
+				<group>[Channel2]</group>
+				<key>pfl</key>
+				<status>0x91</status>
+				<midino>34</midino>
+				<minimum>0.1</minimum>
+			</output>
+
+			<!-- Hotcue indicators -->
+			<output>
+				<group>[Channel1]</group>
+				<key>hotcue_1_enabled</key>
+				<status>0x90</status>
+				<midino>9</midino>
+				<minimum>0.1</minimum>
+			</output>
+			<output>
+				<group>[Channel2]</group>
+				<key>hotcue_1_enabled</key>
+				<status>0x91</status>
+				<midino>9</midino>
+				<minimum>0.1</minimum>
+			</output>
+
+			<output>
+				<group>[Channel1]</group>
+				<key>hotcue_2_enabled</key>
+				<status>0x90</status>
+				<midino>10</midino>
+				<minimum>0.1</minimum>
+			</output>
+			<output>
+				<group>[Channel2]</group>
+				<key>hotcue_2_enabled</key>
+				<status>0x91</status>
+				<midino>10</midino>
+				<minimum>0.1</minimum>
+			</output>
+
+			<output>
+				<group>[Channel1]</group>
+				<key>hotcue_3_enabled</key>
+				<status>0x90</status>
+				<midino>11</midino>
+				<minimum>0.1</minimum>
+			</output>
+			<output>
+				<group>[Channel2]</group>
+				<key>hotcue_3_enabled</key>
+				<status>0x91</status>
+				<midino>11</midino>
+				<minimum>0.1</minimum>
+			</output>
+
+			<output>
+				<group>[Channel1]</group>
+				<key>hotcue_4_enabled</key>
+				<status>0x90</status>
+				<midino>12</midino>
+				<minimum>0.1</minimum>
+			</output>
+			<output>
+				<group>[Channel2]</group>
+				<key>hotcue_4_enabled</key>
+				<status>0x91</status>
+				<midino>12</midino>
+				<minimum>0.1</minimum>
+			</output>
+
+			<output>
+				<group>[Channel1]</group>
+				<key>hotcue_5_enabled</key>
+				<status>0x90</status>
+				<midino>35</midino>
+				<minimum>0.1</minimum>
+			</output>
+			<output>
+				<group>[Channel2]</group>
+				<key>hotcue_5_enabled</key>
+				<status>0x91</status>
+				<midino>35</midino>
+				<minimum>0.1</minimum>
+			</output>
+
+			<output>
+				<group>[Channel1]</group>
+				<key>hotcue_6_enabled</key>
+				<status>0x90</status>
+				<midino>36</midino>
+				<minimum>0.1</minimum>
+			</output>
+			<output>
+				<group>[Channel2]</group>
+				<key>hotcue_6_enabled</key>
+				<status>0x91</status>
+				<midino>36</midino>
+				<minimum>0.1</minimum>
+			</output>
+
+			<output>
+				<group>[Channel1]</group>
+				<key>hotcue_7_enabled</key>
+				<status>0x90</status>
+				<midino>37</midino>
+				<minimum>0.1</minimum>
+			</output>
+			<output>
+				<group>[Channel2]</group>
+				<key>hotcue_7_enabled</key>
+				<status>0x91</status>
+				<midino>37</midino>
+				<minimum>0.1</minimum>
+			</output>
+
+			<output>
+				<group>[Channel1]</group>
+				<key>hotcue_8_enabled</key>
+				<status>0x90</status>
+				<midino>38</midino>
+				<minimum>0.1</minimum>
+			</output>
+			<output>
+				<group>[Channel2]</group>
+				<key>hotcue_8_enabled</key>
+				<status>0x91</status>
+				<midino>38</midino>
+				<minimum>0.1</minimum>
+			</output>
+		</outputs>
+	</controller>
+</MixxxControllerPreset>
