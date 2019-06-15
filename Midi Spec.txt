@@ -1,0 +1,75 @@
+Input:
+	Channel 1: Deck A
+	Channel 2: Deck B
+	Channel 4: Global
+
+	Deck A & B notes:
+		1  Play
+		2  Cue
+		3  Loop In
+		4  Loop Out
+		5  Reloop/Exit
+		6  Hot Cue On/Off
+		7  Loop x2 (Shift + Loop Out)
+		8  Loop /2 (Shift + Loop In)
+		9  Hot Cue 1
+	 10  Hot Cue 2
+	 11  Hot Cue 3
+	 12  Hot Cue 4
+	 13  Shift + Hot Cue 1
+	 14  Shift + Hot Cue 2
+	 15  Shift + Hot Cue 3
+	 16  Shift + Hot Cue 4
+	 17  BPM Tap/Mode
+	 18  Lock (Shift + BPM Tap/Mode)
+	 19  Key Lock
+	 20  Range (Shift + Key Lock)
+	 21  Time
+	 22  Text (Shift + Time)
+	 23  Auto Cue
+	 24  Repeat
+	 26  Search
+	 27  Jog Touch
+	 28  Browse Select
+	 29  Browse Back
+	 32  Scratch
+	 33  Reverse
+	 34  Headphones
+	 35  Hot Cue 5
+	 36  Hot Cue 6
+	 37  Hot Cue 7
+	 38  Hot Cue 8
+	 39  Shift + Hot Cue 5
+	 40  Shift + Hot Cue 6
+	 41  Shift + Hot Cue 7
+	 42  Shift + Hot Cue 8
+	 43  Shift
+
+	Deck A & B controls:
+		1  Pitchslider (0 = up, 127 = down)
+		2  ??
+		3  ??
+		4  Filter (0 = lo, 1 = hi)
+		5  Jogwheel (delta = ceil(value - 63.5))
+
+	Global notes:
+		1  Set VU meter to Cue
+		2  Set VU meter to Master
+
+	Global controls:
+		1  Gain deck A (0 = min, 127 = max)
+		2  Gain deck B (0 = min, 127 = max)
+		3  Mid deck A (0 = min, 127 = max)
+		4  Mid deck B (0 = min, 127 = max)
+		5  High deck A (0 = min, 127 = max)
+		6  High deck B (0 = min, 127 = max)
+		7  Low deck A (0 = min, 127 = max)
+		8  Low deck B (0 = min, 127 = max)
+		9  Volume deck A (0 = min, 127 = max)
+	 10  Volume deck B (0 = min, 127 = max)
+	 11  Crossfader (0 = B, 127 = A)
+	 12  Cue Mix (0 = master, 127 = cue)
+	 13  Master Volume (0 = max, 127 = min)
+	 14  Cue Volume (0 = max, 127 = min)
+	 15  Browse (delta = ceil(value - 63.5))
+	 16  Booth Volume (0 = max, 127 = min)
