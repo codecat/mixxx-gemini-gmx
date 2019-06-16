@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<MixxxControllerPreset schemaVersion="1" mixxxVersion="">
+    <info>
+        <name>Gemini GMX HID</name>
+        <author>Miss</author>
+        <description>Native HID script for Gemini GMX.</description>
+    </info>
+    <controller id="Gemini">
+        <scriptfiles>
+            <file functionprefix="" filename="common-controller-scripts.js"/>
+            <file functionprefix="GeminiGMXHid" filename="Gemini GMX-hid-scripts.js"/>
+        </scriptfiles>
+    </controller>
+</MixxxControllerPreset>
