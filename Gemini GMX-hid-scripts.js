@@ -29,13 +29,22 @@ GeminiGMXHid.init = function(id, debugging) {
 
 	GeminiGMXHid.IsSearching = false;
 
+	GeminiGMXHid.ShowRemainingTime = [ true, true ];
+
 	GeminiGMXHid.UpdateBuffer = [];
 	for (var i = 0; i < 64; i++) {
 		GeminiGMXHid.UpdateBuffer.push(0);
 	}
 
+	GeminiGMXHid.TextBuffer = [];
+	for (var i = 0; i < 64; i++) {
+		GeminiGMXHid.TextBuffer.push(0);
+	}
+
 	GeminiGMXHid.update();
-	GeminiGMXHid.UpdateTimer = engine.beginTimer(10, "GeminiGMXHid.update()");
+	GeminiGMXHid.updateText(1, "Mixxx");
+	GeminiGMXHid.updateText(2, "Mixxx");
+	GeminiGMXHid.setUpdateCallbacks();
 };
 
 GeminiGMXHid.shutdown = function() {
@@ -90,6 +99,38 @@ GeminiGMXHid.checkChanged16 = function(data, offset, onChanged, ud) {
 	}
 };
 
+GeminiGMXHid.setUpdateCallbacks = function() {
+	engine.makeConnection("[Master]", "VuMeterL", GeminiGMXHid.update);
+	engine.makeConnection("[Master]", "VuMeterR", GeminiGMXHid.update);
+
+	for (var deck = 1; deck <= 2; deck++) {
+		var group = "[Channel" + deck + "]";
+
+		engine.makeConnection(group, "beat_active", GeminiGMXHid.update);
+
+		engine.makeConnection(group, "cue_indicator", GeminiGMXHid.update);
+		engine.makeConnection(group, "play_indicator", GeminiGMXHid.update);
+
+		for (var i = 0; i < 8; i++) {
+			engine.makeConnection(group, "hotcue_" + (i + 1), GeminiGMXHid.update);
+
+			//TODO: Option to disable effect toggles on hotcues
+			var effectNum = i - 3;
+			if (effectNum >= 1 && effectNum <= 3) {
+				var fxGroup = "[EffectRack1_EffectUnit" + deck + "_Effect" + effectNum + "]";
+				engine.makeConnection(fxGroup, "enabled", GeminiGMXHid.update);
+			}
+		}
+
+		engine.makeConnection(group, "pfl", GeminiGMXHid.update);
+		engine.makeConnection(group, "keylock", GeminiGMXHid.update);
+		engine.makeConnection(group, "reverse", GeminiGMXHid.update);
+		engine.makeConnection(group, "scratch2_enable", GeminiGMXHid.update);
+		engine.makeConnection(group, "visual_bpm", GeminiGMXHid.update);
+		engine.makeConnection(group, "playposition", GeminiGMXHid.update);
+	}
+};
+
 GeminiGMXHid.updateDeckLeds = function(deck) {
 	var group = "[Channel" + deck + "]";
 
@@ -97,6 +138,9 @@ GeminiGMXHid.updateDeckLeds = function(deck) {
 	if (deck == 2) {
 		offset = 4;
 	}
+
+	//TODO: Just a test, delete this!
+	//GeminiGMXHid.updateText(deck, "My Title", "My Artist", "My Album", "Hardstyle");
 
 	GeminiGMXHid.UpdateBuffer[offset] = 0;
 	GeminiGMXHid.UpdateBuffer[offset + 1] = 0;
@@ -114,16 +158,68 @@ GeminiGMXHid.updateDeckLeds = function(deck) {
 		if (engine.getParameter(group, "hotcue_" + (i + 1) + "_enabled")) {
 			GeminiGMXHid.UpdateBuffer[offset + 1] |= (1 << (7 - i));
 		}
+
+		//TODO: Option to disable effect toggles on hotcues
+		var effectNum = i - 3;
+		if (effectNum >= 1 && effectNum <= 3) {
+			var fxGroup = "[EffectRack1_EffectUnit" + deck + "_Effect" + effectNum + "]";
+			if (engine.getParameter(fxGroup, "enabled")) {
+				GeminiGMXHid.UpdateBuffer[offset + 1] |= (1 << (4 - effectNum));
+			}
+		}
 	}
 
 	if (engine.getParameter(group, "pfl")) { GeminiGMXHid.UpdateBuffer[offset + 2] |= (1 << 5); }
 	if (engine.getParameter(group, "keylock")) { GeminiGMXHid.UpdateBuffer[offset + 2] |= (1 << 6); }
 	if (engine.getParameter(group, "reverse")) { GeminiGMXHid.UpdateBuffer[offset + 2] |= (1 << 7); }
+
+	var lcdOffset = 9;
+	if (deck == 2) {
+		lcdOffset = 23;
+	}
+
+	GeminiGMXHid.UpdateBuffer[lcdOffset] = 0;
+
+	var bpm = engine.getParameter(group, "visual_bpm") * 100;
+	if (bpm) {
+		GeminiGMXHid.UpdateBuffer[lcdOffset] |= (1 << 5);
+
+		GeminiGMXHid.UpdateBuffer[lcdOffset + 9] = (bpm & 0xFF);
+		GeminiGMXHid.UpdateBuffer[lcdOffset + 10] = (bpm & 0xFF00) >> 8;
+	}
+
+	var duration = engine.getParameter(group, "duration");
+	if (duration) {
+		GeminiGMXHid.UpdateBuffer[lcdOffset] |= (1 << 7);
+
+		var playPosition = engine.getParameter(group, "playposition") * duration;
+		var timeLeft = duration - playPosition;
+
+		var reportPosition = playPosition * 75;
+		if (GeminiGMXHid.ShowRemainingTime[deck - 1]) {
+			reportPosition = timeLeft * 75;
+		}
+
+		// Firmware bug: When time is negative, character set is messed up
+		if (reportPosition < 0) {
+			reportPosition = 0;
+		}
+
+		var reportDuration = duration * 75;
+
+		GeminiGMXHid.UpdateBuffer[lcdOffset + 1] = (reportPosition & 0xFF);
+		GeminiGMXHid.UpdateBuffer[lcdOffset + 2] = (reportPosition & 0xFF00) >> 8;
+		GeminiGMXHid.UpdateBuffer[lcdOffset + 3] = (reportPosition & 0xFF0000) >> 16;
+		GeminiGMXHid.UpdateBuffer[lcdOffset + 4] = (reportPosition & 0xFF000000) >> 24;
+
+		GeminiGMXHid.UpdateBuffer[lcdOffset + 5] = (reportDuration & 0xFF);
+		GeminiGMXHid.UpdateBuffer[lcdOffset + 6] = (reportDuration & 0xFF00) >> 8;
+		GeminiGMXHid.UpdateBuffer[lcdOffset + 7] = (reportDuration & 0xFF0000) >> 16;
+		GeminiGMXHid.UpdateBuffer[lcdOffset + 8] = (reportDuration & 0xFF000000) >> 24;
+	}
 };
 
 GeminiGMXHid.update = function() {
-	// This function is called every 50ms and manually whenever an update is necessary
-
 	// Set the deck LEDs
 	GeminiGMXHid.updateDeckLeds(1);
 	GeminiGMXHid.updateDeckLeds(2);
@@ -133,6 +229,60 @@ GeminiGMXHid.update = function() {
 	GeminiGMXHid.UpdateBuffer[8] = engine.getParameter("[Master]", "VuMeterR") * 8;
 
 	controller.send(GeminiGMXHid.UpdateBuffer, GeminiGMXHid.UpdateBuffer.length, 0);
+};
+
+GeminiGMXHid.updateText = function(deck, title, artist, album, genre) {
+	//NOTE: Calling this function will reset the currently shown text type on the LCD.
+	//      I'm not sure if there's a way around this yet, or whether we can specify
+	//      which type to show.
+	//
+	//      We also have not accounted for bytes 2, 3, 4, and 5 yet.
+	GeminiGMXHid.TextBuffer[0] = 0;
+
+	var flags = 0;
+	if (title) { flags |= (1 << 6); }
+	if (artist) { flags |= (1 << 5); }
+	if (album) { flags |= (1 << 4); }
+	if (genre) { flags |= (1 << 3); }
+
+	GeminiGMXHid.TextBuffer[1] = flags;
+
+	if (title) {
+		for (var i = 0; i < 20; i++) {
+			var c = title.charCodeAt(i);
+			if (c === NaN) { c = 20; }
+			GeminiGMXHid.TextBuffer[6 + i] = c;
+		}
+	}
+
+	if (artist) {
+		for (var i = 0; i < 12; i++) {
+			var c = artist.charCodeAt(i);
+			if (c === NaN) { c = 20; }
+			GeminiGMXHid.TextBuffer[26 + i] = c;
+		}
+	}
+
+	if (album) {
+		for (var i = 0; i < 12; i++) {
+			var c = album.charCodeAt(i);
+			if (c === NaN) { c = 20; }
+			GeminiGMXHid.TextBuffer[38 + i] = c;
+		}
+	}
+
+	if (genre) {
+		for (var i = 0; i < 12; i++) {
+			var c = genre.charCodeAt(i);
+			if (c === NaN) { c = 20; }
+			GeminiGMXHid.TextBuffer[50 + i] = c;
+		}
+	}
+
+	GeminiGMXHid.TextBuffer[62] = 0;
+	GeminiGMXHid.TextBuffer[63] = deck;
+
+	controller.send(GeminiGMXHid.TextBuffer, GeminiGMXHid.TextBuffer.length, 0);
 };
 
 GeminiGMXHid.incomingData = function(data, length) {
@@ -262,7 +412,15 @@ GeminiGMXHid.buttonLoopHalf = function(prev, now, ud) {
 };
 
 GeminiGMXHid.buttonHotcue = function(prev, now, ud) {
-	// ud = [ deck, cue number ]
+	var deck = ud[0];
+	var num = ud[1];
+
+	//TODO: Make an option for effect toggles
+	// Hotcue 5 through 7 = effect toggles
+	if (num >= 5 && num <= 7) {
+		var group = "[EffectRack1_EffectUnit" + deck + "_Effect" + (num - 4) + "]";
+		engine.setParameter(group, "enabled", now);
+	}
 };
 
 GeminiGMXHid.buttonShiftHotcue = function(prev, now, ud) {
@@ -288,7 +446,9 @@ GeminiGMXHid.buttonRange = function(prev, now, ud) {
 };
 
 GeminiGMXHid.buttonTime = function(prev, now, ud) {
-	//
+	if (now) {
+		GeminiGMXHid.ShowRemainingTime[ud - 1] = !GeminiGMXHid.ShowRemainingTime[ud - 1];
+	}
 };
 
 GeminiGMXHid.buttonText = function(prev, now, ud) {
