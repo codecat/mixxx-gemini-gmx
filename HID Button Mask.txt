@@ -1,0 +1,64 @@
+0        1        2        3        4        5
+00000000 00000000 00000000 00000000 00000000 00000000
+
+The buttons here actually match the order of the Midi buttons!
+
+Byte 0:
+  (1 << 7) 
+  (1 << 6) play
+  (1 << 5) cue
+  (1 << 4) loop in
+  (1 << 3) loop out
+  (1 << 2) reloop/exit
+  (1 << 1) hot cue off/on (autoloop)
+  (1 << 0) loop x2
+
+Byte 1:
+	(1 << 7) loop /2
+  (1 << 6) hotcue 1
+  (1 << 5) hotcue 2
+  (1 << 4) hotcue 3
+  (1 << 3) hotcue 4
+  (1 << 2) shift + hot cue 1
+  (1 << 1) shift + hot cue 2
+  (1 << 0) shift + hot cue 3
+
+Byte 2:
+  (1 << 7) shift + hot cue 4
+  (1 << 6) bpm tap/mode
+  (1 << 5) lock (shift + bpm tap/mode)
+  (1 << 4) keylock
+  (1 << 3) range
+  (1 << 2) time
+  (1 << 1) text
+  (1 << 0) auto cue
+
+Byte 3:
+  (1 << 7) repeat
+  (1 << 6) 
+  (1 << 5) search
+  (1 << 4) jog touch
+  (1 << 3) browse select
+  (1 << 2) browse back
+  (1 << 1) 
+  (1 << 0) 
+
+Byte 4:
+  (1 << 7) scratch
+  (1 << 6) reverse
+  (1 << 5) headphones
+  (1 << 4) hot cue 5
+  (1 << 3) hot cue 6
+  (1 << 2) hot cue 7
+  (1 << 1) hot cue 8
+  (1 << 0) shift + hot cue 5
+
+Byte 5:
+  (1 << 7) shift + hot cue 6
+  (1 << 6) shift + hot cue 7
+  (1 << 5) shift + hot cue 8
+  (1 << 4) shift
+  (1 << 3) 
+  (1 << 2) 
+  (1 << 1) 
+  (1 << 0) 
