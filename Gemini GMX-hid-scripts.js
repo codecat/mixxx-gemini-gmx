@@ -3,6 +3,17 @@ var GeminiGMXHid = {};
 GeminiGMXHid._JogScratchAlpha = 0.125;
 GeminiGMXHid._JogScratchBeta = GeminiGMXHid._JogScratchAlpha / 32.0;
 
+// BUGFIX: On the Gemini GMX, both jogwheels share the same value internally, but only change when
+//         they are spun. For example, let's say deck A and B both are initialized to value 0. As
+//         soon as you spin deck A from 0 to 50 the values will be 50 for A and 0 for B. But when
+//         you now spin deck B forwards the same rotation, it'll be at value 100 rather than the
+//         expected 50. The value is updated correctly as it spins, but they share the same internal
+//         value.
+//
+//         To work around this, we keep track of the last shared value and use this for the delta,
+//         rather than trusting the previous data we're storing.
+GeminiGMXHid._LastWheelValue = 0;
+
 function readUint16(data, offset)
 {
 	var b1 = data[offset];
@@ -45,10 +56,6 @@ GeminiGMXHid.init = function(id, debugging) {
 	GeminiGMXHid.updateText(1, "Mixxx");
 	GeminiGMXHid.updateText(2, "Mixxx");
 	GeminiGMXHid.setUpdateCallbacks();
-};
-
-GeminiGMXHid.shutdown = function() {
-	engine.stopTimer(GeminiGMXHid.UpdateTimer);
 };
 
 GeminiGMXHid.getBit = function(data, offset, bitpos) {
@@ -563,8 +570,13 @@ GeminiGMXHid.changedRate = function(prev, now, ud) {
 
 GeminiGMXHid.changedJog = function(prev, now, ud) {
 	if (prev === null) {
+		GeminiGMXHid._LastWheelValue = now;
 		return;
 	}
+
+	//BUGFIX: See comment at the very top for more information
+	prev = GeminiGMXHid._LastWheelValue;
+	GeminiGMXHid._LastWheelValue = now;
 
 	// 0 to 179 (then wraps around)
 	var delta = now - prev;
