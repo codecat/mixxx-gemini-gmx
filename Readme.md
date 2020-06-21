@@ -10,6 +10,8 @@ There are 2 mappings in this repository:
 
 The HID interface can do a lot more than the MIDI interface, so I suggest only using that one.
 
+You **must** use Mixxx 2.3.0 or higher for the HID script to work, as it relies on a fix for a deadlock issue that causes the controller to stop responding mid-use.
+
 ## Things that don't work yet
 The MIDI interface has a lot of things that don't work, but the HID interface supports most things. The following features I have not implemented yet into the HID script:
 
